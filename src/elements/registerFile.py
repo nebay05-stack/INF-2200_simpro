@@ -21,8 +21,6 @@ class RegisterFile(CPUElement):
             self.register[i] = 0
 
     def connectInputs(self, inputs: List[Value]):
-        
-
         self.readregister_1 = inputs[0]
         self.readregister_2 = inputs[1]
         self.writeregister = inputs[2]
@@ -36,9 +34,6 @@ class RegisterFile(CPUElement):
         if self.writedata != None:
             self.writeregister.value = self.writedata
 
-
-
-        
 
     def printAll(self):
         '''
