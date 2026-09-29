@@ -3,7 +3,7 @@ from elements.cpuElement import CPUElement
 from typing import List
 
 
-class Controll_unit(CPUElement):
+class Controller(CPUElement):
     def __init__(self):
         # Inputs
         self.oppcode = Value(0)
@@ -19,7 +19,7 @@ class Controll_unit(CPUElement):
         self.RegWrite: Value = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 1, 'controll_unit should have one inputs'
+        assert len(inputs) == 1, 'controller should have one inputs'
 
         oppcode = inputs[0].value
 
@@ -37,5 +37,15 @@ class Controll_unit(CPUElement):
             self.RegWrite.value = 1
             self.ALUOp.value = 10
             if self.result #her skal overflow håndteres for å hondtere foskjellen mellom addi og addiu resultatet
-        elif self.oppcode.value == 
+        elif self.oppcode.value == 35: #lw signalene
+            self.RegDst.value = 0
+            self.ALUSrc.value = 1
+            self.MemtoReg.value = 1
+            self.RegWrite.value = 1
+            self.MemRead.value = 1
+            self.ALUOp.value = 00
+        elif self.oppcode.value == 43: #sw signalene
+            self.ALUSrc.value = 1
+            self.MemWrite.value = 1
+            self.ALUOp.value = 00 
 

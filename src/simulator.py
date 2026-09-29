@@ -3,10 +3,18 @@ Code written for inf-2200, University of Tromso
 '''
 
 import sys
+from elements import controll_unit
+from elements import Mux
 from mipsSimulator import MIPSSimulator
+
 
 def runSimulator(sim: MIPSSimulator):
     # Replace this with your own main loop!
+    controller = controll_unit() 
+    mux_alusrc = Mux()
+    mux_regdst = Mux()
+    
+
     while (1):
         sim.tick()
         print(hex(sim.pc.currentAddress.value))
