@@ -13,7 +13,9 @@ class DataMemory(Memory):
         Memory.__init__(self, filename)
         
     def connectInputs(self, inputs: List[Value]):
-        # Remove this and replace with your implementation!
+        self.address = inputs[0]
+        self.writedata = inputs[1]
+        
         raise AssertionError("connect not implemented in class DataMemory!")
     
     def writeOutput(self):

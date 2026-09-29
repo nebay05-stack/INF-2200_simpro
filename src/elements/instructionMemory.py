@@ -13,7 +13,8 @@ class InstructionMemory(Memory):
         Memory.__init__(self, filename)
     
     def connectInputs(self, inputs: List[Value]):
-        # Remove this and replace with your implementation!
+        self.address = inputs[0]
+        
         raise AssertionError("connect not implemented in class InstructionMemory!")
     
     def writeOutput(self):
