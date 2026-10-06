@@ -17,7 +17,10 @@ class Addiu(CPUElement):
         # Inputs
         self.value_a = inputs[0]
         self.value_b = inputs[1]
-        
+
+        assert isinstance(self.value_a.value, int) and isinstance(self.value_b.value, int)
+        assert self.value_a.value >= 0 and self.value_b.value >= 0
+
     def writeOutput(self):
         # Output values
         assert isinstance(self.value_a.value, int) and isinstance(self.value_b.value, int)
