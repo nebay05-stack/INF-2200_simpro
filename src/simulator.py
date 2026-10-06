@@ -6,11 +6,13 @@ import sys
 from elements import controll_unit
 from elements import Mux
 from mipsSimulator import MIPSSimulator
+from instructionMemory t
 
 
 def runSimulator(sim: MIPSSimulator):
     # Replace this with your own main loop!
     controller = controll_unit() 
+    instruction_memory = in
     mux_alusrc = Mux()
     mux_regdst = Mux()
     

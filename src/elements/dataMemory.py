@@ -27,7 +27,6 @@ class DataMemory(Memory):
     
     def writeOutput(self):
         # Remove this and replace with your implementation!
-        controller = Controller()
         if controller.MemRead.value == 1:
             self.readdata = self.memory[self.address]
 
