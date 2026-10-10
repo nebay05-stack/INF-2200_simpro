@@ -21,6 +21,5 @@ class Slt(CPUElement):
     def writeOutput(self):
         # Output values
         assert isinstance(self.value_a.value, int) and isinstance(self.value_b.value, int)
-        if (self.value_a.value < self.value_b.value):
-            self.result.value = 1
+        self.result.value = (self.value_a.value < self.value_b.value) & 0xffffffff
         

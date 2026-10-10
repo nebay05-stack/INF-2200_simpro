@@ -2,7 +2,7 @@ from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
 
-class Addiu(CPUElement):
+class And(CPUElement):
     def __init__(self):
         # Inputs
         self.value_a: Value = Value(0)
@@ -12,7 +12,7 @@ class Addiu(CPUElement):
         self.result = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 2, 'Addiu should have two inputs'
+        assert len(inputs) == 2, 'And should have two inputs'
         
         # Inputs
         self.value_a = inputs[0]
