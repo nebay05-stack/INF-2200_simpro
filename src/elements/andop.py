@@ -2,7 +2,7 @@ from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
 
-class And(CPUElement):
+class Andop(CPUElement):
     def __init__(self):
         # Inputs
         self.value_a: Value = Value(0)
