@@ -28,13 +28,13 @@ class Memory(CPUElement):
                 if not line or line.startswith('#'):
                     continue
 
-            adress_value = line.split()
+                adress_value = line.split()
             
-            if len(adress_value) >= 2:
-                adress = int(adress_value[0], 0)
-                value = int(adress_value[1], 0)
+                if len(adress_value) >= 2:
+                    adress = int(adress_value[0], 0)
+                    value = int(adress_value[1], 0)
 
-                self.memory[adress] = value
+                    self.memory[adress] = value
         
     def printAll(self):
         for key in sorted(self.memory.keys()):
