@@ -4,6 +4,8 @@ Code written for inf-2200, University of Tromso
 
 from elements.pc import PC
 from elements.add import Add
+from elements.addi import Addi
+from elements.addiu import Addiu
 from elements.mux import Mux
 from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
@@ -35,6 +37,8 @@ class MIPSSimulator():
         self.muxMemtoReg = Mux()
         self.muxALUSrc = Mux()
         self.adder = Add()
+        self.adder_i = Addi()
+        self.adder_iu = Addiu()
         self.pc = PC(self.startAddress())
 
         self.elements = [self.constant3, self.constant4,
@@ -50,7 +54,7 @@ class MIPSSimulator():
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
         self.muxPCSrc.connectInputs([self.adder.result, self.constant3.constantValue, self.randomControl.controlSignal])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
-        
+
         
 
         #mux for memtoreg
