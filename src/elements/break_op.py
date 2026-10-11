@@ -2,7 +2,7 @@ from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
 
-class Break(CPUElement):
+class Break_op(CPUElement):
     def __init__(self):
         # Inputy
         self.break_signal: Value = Value(0)

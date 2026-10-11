@@ -6,6 +6,7 @@ from elements.pc import PC
 from elements.add import Add
 from elements.addi import Addi
 from elements.addiu import Addiu
+from elements.break_op import Break_op
 from elements.mux import Mux
 from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
@@ -39,6 +40,7 @@ class MIPSSimulator():
         self.adder = Add()
         self.adder_i = Addi()
         self.adder_iu = Addiu()
+        self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
         self.elements = [self.constant3, self.constant4,
