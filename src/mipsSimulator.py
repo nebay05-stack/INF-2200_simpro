@@ -30,12 +30,16 @@ class MIPSSimulator():
         self.constant3 = Constant(3)
         self.constant4 = Constant(4)
         self.randomControl = RandomControl()
-        self.mux = Mux()
+        self.muxPCSrc = Mux()
+        self.muxRegDst = Mux()
+        self.muxMemtoReg = Mux()
+        self.muxALUSrc = Mux()
         self.adder = Add()
         self.pc = PC(self.startAddress())
+        self.instructionMemory = InstructionMemory()
 
         self.elements = [self.constant3, self.constant4,
-                         self.randomControl, self.adder, self.mux]
+                         self.randomControl, self.adder, self.muxPCSrc]
 
         self._connectCPUElements()
 
@@ -43,9 +47,16 @@ class MIPSSimulator():
         self.constant3.connectInputs([])
         self.constant4.connectInputs([])
         self.randomControl.connectInputs([])
-        self.pc.connectInputs([self.mux.output])
+        self.pc.connectInputs([self.muxPCSrc.output])
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
-        self.mux.connectInputs([self.adder.result, self.constant3.constantValue, self.randomControl.controlSignal])
+        self.muxPCSrc.connectInputs([self.adder.result, self.constant3.constantValue, self.randomControl.controlSignal])
+        self.instructionMemory.connectInputs([self.pc.currentAddress])
+        
+        
+
+        #mux for memtoreg
+        self.muxMemtoReg
+
 
     def startAddress(self):
         '''

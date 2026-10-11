@@ -29,6 +29,7 @@ class DataMemory(Memory):
         # Remove this and replace with your implementation!
         if controller.MemRead.value == 1:
             self.readdata = self.memory[self.address]
+            
 
 
         

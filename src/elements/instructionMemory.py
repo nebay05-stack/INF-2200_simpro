@@ -12,13 +12,17 @@ class InstructionMemory(Memory):
     def __init__(self, filename: str):
         Memory.__init__(self, filename)
         self.Readaddres: Value = Value(0)
+
+        # Output
+        self.result = Value(0)
         
     
     def connectInputs(self, inputs: List[Value]):
-        self.address = inputs[0]
+        assert len(inputs) == 1, 'instructionmemmory should have two inputs'
+        self.Readaddres = inputs[0]
 
-        raise AssertionError("connect not implemented in class InstructionMemory!")
-    
+
     def writeOutput(self):
-        if self.address in self.
-        raise AssertionError("writeOutput not implemented in class InstructionMemory!")
+        assert isinstance(self.Readaddres.value, int)
+        self.result.value = self.memory.get(self.Readaddres.value, 0)
+        

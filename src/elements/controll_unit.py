@@ -36,7 +36,6 @@ class Controller(CPUElement):
             self.ALUSrc.value = 1
             self.RegWrite.value = 1
             self.ALUOp.value = 10
-            if self.result #her skal overflow håndteres for å hondtere foskjellen mellom addi og addiu resultatet
         elif self.oppcode.value == 35: #lw signalene
             self.RegDst.value = 0
             self.ALUSrc.value = 1
@@ -48,4 +47,5 @@ class Controller(CPUElement):
             self.ALUSrc.value = 1
             self.MemWrite.value = 1
             self.ALUOp.value = 00 
+            
 

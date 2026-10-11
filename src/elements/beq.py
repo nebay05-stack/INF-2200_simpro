@@ -2,17 +2,17 @@ from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
 
-class Add(CPUElement):
+class Beq(CPUElement):
     def __init__(self):
         # Inputs
         self.value_a: Value = Value(0)
         self.value_b: Value = Value(0)
         
         # Output
-        self.result = Value(0)
+        self.jump_signal = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 2, 'Adder should have two inputs'
+        assert len(inputs) == 2, 'beq should have two inputs'
         
         # Inputs
         self.value_a = inputs[0]
@@ -22,7 +22,10 @@ class Add(CPUElement):
         # Output values
         assert isinstance(self.value_a.value, int) and isinstance(self.value_b.value, int)
         if self.value_a.value == self.value_b.value:
-            self.result.value = self.
+            self.jump_signal.value = 1
+        else:
+            self.jump_signal.value = 0
+            
         
         
         

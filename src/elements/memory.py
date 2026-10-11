@@ -25,7 +25,6 @@ class Memory(CPUElement):
 
          for line in f:
              line = line.strip()
-
              if not line or line.startswith('#'):
                 continue
 
