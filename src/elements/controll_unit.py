@@ -17,35 +17,64 @@ class Controller(CPUElement):
         self.MemWrite: Value = Value(0)
         self.ALUSrc: Value = Value(0)
         self.RegWrite: Value = Value(0)
+        self.Jump: Value = Value(0)
+        self.Break: Value = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
         assert len(inputs) == 1, 'controller should have one inputs'
 
-        oppcode = inputs[0].value
+        self.oppcode = inputs[0]
 
         
     def writeOutput(self):
 
-        if self.oppcode.value == 0: #add signalene
+        self.RegDst.value = 0
+        self.Branch.value = 0
+        self.MemRead.value = 0
+        self.MemtoReg.value = 0
+        self.ALUOp.value = 0
+        self.MemWrite.value = 0
+        self.ALUSrc.value = 0
+        self.RegWrite.value = 0
+        self.Jump.value = 0
+        self.Break.value = 0
+
+        oppcode = self.oppcode.value
+
+        if oppcode == 0: #add signalene
             self.RegDst.value = 1
             self.ALUSrc.value = 0
             self.RegWrite.value = 1
             self.ALUOp.value = 10
-        elif self.oppcode.value == 8 or self.oppcode.value == 9: #addi og addiu signalene
+        elif oppcode == 8 or oppcode == 9: #addi og addiu signalene
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.RegWrite.value = 1
             self.ALUOp.value = 10
-        elif self.oppcode.value == 35: #lw signalene
+        elif oppcode == 35: #lw signalene
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.MemtoReg.value = 1
             self.RegWrite.value = 1
             self.MemRead.value = 1
-            self.ALUOp.value = 00
-        elif self.oppcode.value == 43: #sw signalene
+            self.ALUOp.value = 0
+        elif oppcode == 43: #sw signalene
             self.ALUSrc.value = 1
             self.MemWrite.value = 1
-            self.ALUOp.value = 00 
+            self.ALUOp.value = 0 
+        elif oppcode == 4: #beq signalene
+            self.Branch.value = 1
+            self.ALUOp.value = 1
+        elif oppcode == 5: #bne signalene
+            self.Branch.value = 1 
+            self.ALUOp.value = 1  
+        elif oppcode == 2: #j signalene
+            self.Jump.value = 1
+        elif oppcode == 15: #lui signalene
+            self.RegDst.value = 0
+            self.ALUSrc.value = 1
+            self.RegWrite.value = 1
+        elif oppcode == 13: #break signalene
+            self.Break.value = 1
             
 
