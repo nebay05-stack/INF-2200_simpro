@@ -25,10 +25,7 @@ class DataMemory(Memory):
         self.writedata = inputs[1]
         self.MemRead = inputs[2]
         self.MemWrite = inputs[3]
-
     
-    def writeOutput(self):        
-        if self.MemRead.value == 1:
-            self.readdata.value = self.memory.get(self.address.value, 0)
-        if self.MemWrite.value == 1:
-            self.memory[self.address.value] = self.writedata.value  
+    def writeOutput(self):
+        if controller.MemRead.value == 1:
+            self.readdata = self.memory[self.address]
