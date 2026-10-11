@@ -1,7 +1,7 @@
 from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
-from dataMemory import DataMemory
+from .dataMemory import DataMemory
 
 class Sw(CPUElement):
     def __init__(self, data_memory):

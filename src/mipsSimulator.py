@@ -1,11 +1,22 @@
 '''
 Code written for inf-2200, University of Tromso
 '''
-
+from common import Value, Break
 from elements.pc import PC
 from elements.add import Add
-from elements.addi import Addi
 from elements.addiu import Addiu
+from elements.sub import Sub
+from elements.subu import Subu
+from elements.andop import Andop
+from elements.beq import Beq
+from elements.bne import Bne
+from elements.break_op import Break_op
+from elements.j import J
+from elements.lui import Lui
+from elements.lw import Lw
+from elements.nor import Nor
+from elements.slt import Slt
+from elements.sw import Sw
 from elements.break_op import Break_op
 from elements.mux import Mux
 from elements.controll_unit import Controller
@@ -13,7 +24,9 @@ from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
 from elements.dataMemory import DataMemory
 from elements.constant import Constant
-from elements.randomControl import RandomControl
+from elements.signextend import Signextend
+from elements.alu_kontroller import AluController
+from elements.alu import Alu
 
 
 class MIPSSimulator():
@@ -33,37 +46,59 @@ class MIPSSimulator():
 
         self.constant3 = Constant(3)
         self.constant4 = Constant(4)
-        self.randomControl = RandomControl()
         self.controller = Controller()
         self.muxPCSrc = Mux()
         self.muxRegDst = Mux()
         self.muxMemtoReg = Mux()
         self.muxALUSrc = Mux()
         self.adder = Add()
-        self.adder_i = Addi()
         self.adder_iu = Addiu()
+        self.sub = Sub()
+        self.subu = Subu()
+        self.andop = Andop()
+        self.beq = Beq()
+        self.bne = Bne()
+        self.j = J()
+        self.lui = Lui()
+        self.lw = Lw(self.dataMemory)
+        self.nor = Nor()
+        self.slt = Slt()
+        self.sw = Sw(self.dataMemory)
+        self.signextend = Signextend()
+        self.alu = Alu()
+        self.alu_kontroller = AluController()
+
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
-        self.elements = [self.constant3, self.constant4,
-                         self.randomControl, self.adder, self.muxPCSrc, self.instructionMemory, ]
+        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.muxPCSrc, self.brake]
 
         self._connectCPUElements()
 
     def _connectCPUElements(self):
         self.constant3.connectInputs([])
         self.constant4.connectInputs([])
-        self.randomControl.connectInputs([])
         self.pc.connectInputs([self.muxPCSrc.output])
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
-        self.muxPCSrc.connectInputs([self.adder.result, self.constant3.constantValue, self.randomControl.controlSignal])
+        self.muxPCSrc.connectInputs([self.adder.result, self.adder.result, self.controller.Branch])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
-
+        self.brake.connectInputs([self.instructionMemory.function])
         
+        self.muxRegDst.connectInputs([self.instructionMemory.rt, self.instructionMemory.rd, self.controller.RegDst])
 
-        #mux for memtoreg
-        self.muxMemtoReg
+        self.registerFile.connectInputs([self.instructionMemory.rs, self.instructionMemory.rt, self.muxRegDst.output, self.muxMemtoReg.output, self.controller.RegWrite])
+
+        self.signextend.connectInputs([self.instructionMemory.imidiat])
+
+        self.muxALUSrc.connectInputs([self.registerFile.readdata_2, self.signextend.result, self.controller.ALUSrc])
+        self.alu_kontroller.connectInputs([self.controller.ALUOp, self.instructionMemory.function])
+
+        self.alu.connectInputs([self.registerFile.readdata_1, self.muxALUSrc.output, self.alu_kontroller.alu_control_out])
+        self.dataMemory.connectInputs([self.alu.result, self.registerFile.readdata_2, self.controller.MemRead, self.controller.MemWrite])
+        self.muxMemtoReg.connectInputs([self.alu.result, self.dataMemory.readdata, self.controller.MemtoReg])
+        
+        #self. imidiat bittene
 
 
     def startAddress(self):
@@ -100,7 +135,12 @@ class MIPSSimulator():
         
         self.nCycles += 1
         
-        # The following is just a small sample implementation
         self.pc.writeOutput()
+    
         for elem in self.elements:
             elem.writeOutput()
+
+        self.registerFile.writeOutput()
+
+        if self.brake.full_stop.value == 1:
+            raise Break("Break instruction encountered")

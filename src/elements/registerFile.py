@@ -20,19 +20,39 @@ class RegisterFile(CPUElement):
         for i in range(0, 32):
             self.register[i] = 0
 
+        # Inputs 
+        self.readregister_1: Value = Value(0)
+        self.readregister_2: Value = Value(0)
+        self.writeregister: Value = Value(0)
+        self.writedata: Value = Value(0)
+        self.reg_write: Value = Value(0) 
+
+        # Outputs 
+        self.readdata_1 = Value(0)
+        self.readdata_2 = Value(0)
+
     def connectInputs(self, inputs: List[Value]):
         self.readregister_1 = inputs[0]
         self.readregister_2 = inputs[1]
         self.writeregister = inputs[2]
         self.writedata = inputs[3]
+        self.reg_write = inputs[4]
 
     def writeOutput(self):
-        assert isinstance(self.readregister_1.value, int) and isinstance(self.readregister_2, int)
-        self.readdata_1 = self.register[self.readregister_1.value]
-        self.register_2 = self.register[self.readregister_2.value]
+        assert isinstance(self.readregister_1.value, int) and isinstance(self.readregister_2.value, int)
+        
+        self.readdata_1.value = self.register.get(self.readregister_1.value, 0)
+        self.readdata_2.value = self.register.get(self.readregister_2.value, 0)
 
-        if self.writedata != None:
-            self.writeregister.value = self.writedata
+        if self.reg_write.value == 1:
+            reg_dest = self.writeregister.value
+            data_to_write = self.writedata.value
+        
+            if reg_dest != 0: 
+                self.register[reg_dest] = data_to_write & 0xFFFFFFFF
+        
+
+        
 
 
     def printAll(self):

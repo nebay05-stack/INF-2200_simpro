@@ -41,40 +41,37 @@ class Controller(CPUElement):
 
         oppcode = self.oppcode.value
 
-        if oppcode == 0: #add signalene
+        if oppcode == 0: #alle r-type instruksjoner
             self.RegDst.value = 1
             self.ALUSrc.value = 0
             self.RegWrite.value = 1
-            self.ALUOp.value = 10
-        elif oppcode == 8 or oppcode == 9: #addi og addiu signalene
+            self.ALUOp.value = 0b10
+        elif oppcode == 8 or oppcode == 9: #addi og addiu
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.RegWrite.value = 1
-            self.ALUOp.value = 10
-        elif oppcode == 35: #lw signalene
+            self.ALUOp.value = 0b00
+        elif oppcode == 35: #lw
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.MemtoReg.value = 1
             self.RegWrite.value = 1
             self.MemRead.value = 1
-            self.ALUOp.value = 0
-        elif oppcode == 43: #sw signalene
+            self.ALUOp.value = 0b00
+            
+        elif oppcode == 43: #sw
             self.ALUSrc.value = 1
             self.MemWrite.value = 1
-            self.ALUOp.value = 0 
-        elif oppcode == 4: #beq signalene
+            self.ALUOp.value = 0b00
+        elif oppcode == 4: #beq
             self.Branch.value = 1
-            self.ALUOp.value = 1
-        elif oppcode == 5: #bne signalene
+            self.ALUOp.value = 1  
+        elif oppcode == 5: #bne
             self.Branch.value = 1 
             self.ALUOp.value = 1  
-        elif oppcode == 2: #j signalene
+        elif oppcode == 2: #j
             self.Jump.value = 1
-        elif oppcode == 15: #lui signalene
+        elif oppcode == 15: #lui
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.RegWrite.value = 1
-        elif oppcode == 13: #break signalene
-            self.Break.value = 1
-            
-

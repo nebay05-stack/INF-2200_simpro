@@ -11,6 +11,7 @@ from typing import List
 class InstructionMemory(Memory):
     def __init__(self, filename: str):
         Memory.__init__(self, filename)
+        print("Minne-adresser i filen:", list(self.memory.keys()))
         self.Readaddres: Value = Value(0)
 
         # Output
@@ -19,10 +20,11 @@ class InstructionMemory(Memory):
         self.rd = Value(0)
         self.rt = Value(0)
         self.imidiat = Value(0) 
+        self.function = Value(0)
         
     
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 1, 'instructionmemmory should have two inputs'
+        assert len(inputs) == 1, 'instructionmemmory should have one inputs'
         self.Readaddres = inputs[0]
 
 
@@ -35,5 +37,7 @@ class InstructionMemory(Memory):
         self.rs.value = (instruction >> 21) & 0x1f
         self.rt.value = (instruction >> 16) & 0x1f
         self.rd.value = (instruction >> 11) & 0x1f
-        self.imidiat = (instruction >> 0) & 0xffff
-        
+        self.imidiat.value = (instruction >> 0) & 0xffff
+        self.function.value = instruction & 0x3f
+
+        print(f"PC: {self.Readaddres.value} | rs: {self.rs.value}, rt: {self.rt.value}")

@@ -19,7 +19,7 @@ class Break_op(CPUElement):
     def writeOutput(self):
         # Output values
         assert isinstance(self.break_signal.value, int) 
-        if self.break_signal.value == 1:
+        if self.break_signal.value == 13:
             self.full_stop.value = 1
         else:
             self.full_stop.value = 0
