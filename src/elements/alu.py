@@ -24,8 +24,6 @@ class Alu(CPUElement):
         v2 = self.source_2.value
         four_bit = self.alu_control.value
 
-        print(f"ALU REGNET UT: {v1} + {v2} = {v1 + v2} (ctrl: {ctrl})")
-
         assert isinstance(self.source_1.value, int) and isinstance(self.source_2.value, int)
 
         res = 0
