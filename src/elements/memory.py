@@ -35,8 +35,6 @@ class Memory(CPUElement):
                 value = int(adress_value[1], 0)
 
                 self.memory[adress] = value
-
-        raise AssertionError("initializeMemory not implemented in class Memory!")
         
     def printAll(self):
         for key in sorted(self.memory.keys()):
