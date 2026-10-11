@@ -25,8 +25,3 @@ class Beq(CPUElement):
             self.jump_signal.value = 1
         else:
             self.jump_signal.value = 0
-            
-        
-        
-        
-        self.result.value = (self.value_a.value + self.value_b.value) & 0xffffffff # Convert to 32-bit (ignore overflow)
