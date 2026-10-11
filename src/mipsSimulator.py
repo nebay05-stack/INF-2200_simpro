@@ -36,7 +36,6 @@ class MIPSSimulator():
         self.muxALUSrc = Mux()
         self.adder = Add()
         self.pc = PC(self.startAddress())
-        self.instructionMemory = InstructionMemory()
 
         self.elements = [self.constant3, self.constant4,
                          self.randomControl, self.adder, self.muxPCSrc]
