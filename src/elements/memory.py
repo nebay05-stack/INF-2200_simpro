@@ -23,20 +23,18 @@ class Memory(CPUElement):
     def initializeMemory(self, filename: str):
         with open(filename, 'r') as f:
 
-         for line in f:
-             line = line.strip()
-             if not line or line.startswith('#'):
-                continue
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
 
-             adress_value = line.split()
-
-             if len(adress_value) >= 2:
+            adress_value = line.split()
+            
+            if len(adress_value) >= 2:
                 adress = int(adress_value[0], 0)
                 value = int(adress_value[1], 0)
 
                 self.memory[adress] = value
-
-        raise AssertionError("initializeMemory not implemented in class Memory!")
         
     def printAll(self):
         for key in sorted(self.memory.keys()):
