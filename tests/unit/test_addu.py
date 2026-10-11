@@ -2,7 +2,7 @@ import unittest
 from elements.addu import Addu
 from common import Value
 
-class TestAdd(unittest.TestCase):
+class TestAddu(unittest.TestCase):
     def setUp(self):
         self.adduer = Addu()
         self.value_a = Value(5)

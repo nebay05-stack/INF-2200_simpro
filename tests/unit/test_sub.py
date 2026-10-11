@@ -2,7 +2,7 @@ import unittest
 from elements.sub import Sub
 from common import Value
 
-class TestAdd(unittest.TestCase):
+class Testsub(unittest.TestCase):
     def setUp(self):
         self.Sub = Sub()
         self.value_a = Value(5)
