@@ -26,9 +26,14 @@ class DataMemory(Memory):
         self.MemRead = inputs[2]
         self.MemWrite = inputs[3]
 
+        raise AssertionError("connect not implemented in class DataMemory!")
     
-    def writeOutput(self):        
-        if self.MemRead.value == 1:
-            self.readdata.value = self.memory.get(self.address.value, 0)
-        if self.MemWrite.value == 1:
-            self.memory[self.address.value] = self.writedata.value  
+    def writeOutput(self):
+        # Remove this and replace with your implementation!
+        if controller.MemRead.value == 1:
+            self.readdata = self.memory[self.address]
+            
+
+
+        
+        raise AssertionError("writeOutput not implemented in class DataMemory!")

@@ -8,9 +8,10 @@ from typing import List
 
 class PC(CPUElement):
     def __init__(self, baseaddr: int):
+        self.baseaddr = baseaddr
+        
         # Input
         self.incomingAddress: Value = Value(0)
-        self.incomingAddress.value = baseaddr
         
         # Output
         self.currentAddress: Value = Value(0)
