@@ -14,7 +14,7 @@ class Test_Controller(unittest.TestCase):
     def test_writeOutput(self):
         self.controller.connectInputs([self.oppcode])
         self.controller.writeOutput()
-        self.assertEqual(self.RegDst.value, 0)
-        self.assertEqual(self.ALUSrc.value, 0)
-        self.assertEqual(self.RegWrite.value, 0)
-        self.assertEqual(self.ALUOp.value, 0)
+        self.assertEqual(self.controller.RegDst.value, 1)
+        self.assertEqual(self.controller.ALUSrc.value, 0)
+        self.assertEqual(self.controller.RegWrite.value, 1)
+        self.assertEqual(self.controller.ALUOp.value, 10)
