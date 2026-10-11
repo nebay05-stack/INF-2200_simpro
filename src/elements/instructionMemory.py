@@ -14,7 +14,11 @@ class InstructionMemory(Memory):
         self.Readaddres: Value = Value(0)
 
         # Output
-        self.result = Value(0)
+        self.oppcode = Value(0)
+        self.rs = Value(0)
+        self.rd = Value(0)
+        self.rt = Value(0)
+        self.imidiat = Value(0) 
         
     
     def connectInputs(self, inputs: List[Value]):
@@ -24,5 +28,12 @@ class InstructionMemory(Memory):
 
     def writeOutput(self):
         assert isinstance(self.Readaddres.value, int)
-        self.result.value = self.memory.get(self.Readaddres.value, 0)
+
+        instruction = self.memory.get(self.Readaddres.value, 0)
+
+        self.oppcode.value = (instruction >> 26) & 0x3f 
+        self.rs.value = (instruction >> 21) & 0x1f
+        self.rt.value = (instruction >> 16) & 0x1f
+        self.rd.value = (instruction >> 11) & 0x1f
+        self.imidiat = (instruction >> 0) & 0xffff
         

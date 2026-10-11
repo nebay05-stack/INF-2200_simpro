@@ -8,6 +8,7 @@ from elements.addi import Addi
 from elements.addiu import Addiu
 from elements.break_op import Break_op
 from elements.mux import Mux
+from elements.controll_unit import Controller
 from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
 from elements.dataMemory import DataMemory
@@ -33,6 +34,7 @@ class MIPSSimulator():
         self.constant3 = Constant(3)
         self.constant4 = Constant(4)
         self.randomControl = RandomControl()
+        self.controller = Controller()
         self.muxPCSrc = Mux()
         self.muxRegDst = Mux()
         self.muxMemtoReg = Mux()
@@ -44,7 +46,7 @@ class MIPSSimulator():
         self.pc = PC(self.startAddress())
 
         self.elements = [self.constant3, self.constant4,
-                         self.randomControl, self.adder, self.muxPCSrc]
+                         self.randomControl, self.adder, self.muxPCSrc, self.instructionMemory, ]
 
         self._connectCPUElements()
 
@@ -56,6 +58,7 @@ class MIPSSimulator():
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
         self.muxPCSrc.connectInputs([self.adder.result, self.constant3.constantValue, self.randomControl.controlSignal])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
+        self.controller.connectInputs([self.instructionMemory.oppcode])
 
         
 
