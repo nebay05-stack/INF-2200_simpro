@@ -12,7 +12,7 @@ class Lw(CPUElement):
         self.result = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 1, 'Lw should have two inputs'
+        assert len(inputs) == 1, 'Lw should have one inputs'
           
         # Inputs
         self.value_a = inputs[0]
