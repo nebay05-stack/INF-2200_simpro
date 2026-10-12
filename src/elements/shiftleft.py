@@ -1,7 +1,5 @@
 from elements.cpuElement import CPUElement
 from typing import List
-from common import Value
-
 class Shiftleft(CPUElement):
     def __init__(self):
         #Input
