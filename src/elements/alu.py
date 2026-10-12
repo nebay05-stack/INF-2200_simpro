@@ -41,6 +41,8 @@ class Alu(CPUElement):
             res = 1 if self.source_1.value < self.source_2.value else 0
         elif four_bit == 0b1100:
             res = ~(self.source_1.value | self.source_2.value) & 0xffffffff
+        elif four_bit == 0b1111:
+            res = (v2 << 16) & 0xFFFFFFFF
         else:
             res = 0 
             

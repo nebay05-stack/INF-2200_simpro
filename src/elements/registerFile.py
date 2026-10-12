@@ -3,7 +3,6 @@ Code written for inf-2200, University of Tromso
 '''
 
 from elements.cpuElement import CPUElement
-import common
 from typing import List
 from common import Value
 

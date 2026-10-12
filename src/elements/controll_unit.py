@@ -65,13 +65,16 @@ class Controller(CPUElement):
             self.ALUOp.value = 0b00
         elif oppcode == 4: #beq
             self.Branch.value = 1
-            self.ALUOp.value = 1  
+            self.ALUOp.value = 1 
+            self.ALUOp.value = 0b01 
         elif oppcode == 5: #bne
             self.Branch.value = 1 
-            self.ALUOp.value = 1  
+            self.ALUOp.value = 1 
+            self.ALUOp.value = 0b01 
         elif oppcode == 2: #j
             self.Jump.value = 1
         elif oppcode == 15: #lui
             self.RegDst.value = 0
             self.ALUSrc.value = 1
             self.RegWrite.value = 1
+            self.ALUOp.value = 0b11

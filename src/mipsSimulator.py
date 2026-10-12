@@ -25,6 +25,7 @@ from elements.instructionMemory import InstructionMemory
 from elements.dataMemory import DataMemory
 from elements.constant import Constant
 from elements.signextend import Signextend
+from elements.shift
 from elements.alu_kontroller import AluController
 from elements.alu import Alu
 
@@ -52,6 +53,7 @@ class MIPSSimulator():
         self.muxMemtoReg = Mux()
         self.muxALUSrc = Mux()
         self.adder = Add()
+        self.branch_adder = Add()
         self.adder_iu = Addiu()
         self.sub = Sub()
         self.subu = Subu()
@@ -71,7 +73,7 @@ class MIPSSimulator():
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
-        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.muxPCSrc, self.brake]
+        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.branch_adder, self.muxPCSrc, self.brake]
 
         self._connectCPUElements()
 
@@ -80,10 +82,11 @@ class MIPSSimulator():
         self.constant4.connectInputs([])
         self.pc.connectInputs([self.muxPCSrc.output])
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
-        self.muxPCSrc.connectInputs([self.adder.result, self.adder.result, self.controller.Branch])
+        self.muxPCSrc.connectInputs([self.adder.result, self.branch_adder.result, self.muxPCSrc.controlSignal])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
         self.brake.connectInputs([self.instructionMemory.function])
+        self.branch_adder.connectInputs([self.adder.result, self.signextend.result])
         
         self.muxRegDst.connectInputs([self.instructionMemory.rt, self.instructionMemory.rd, self.controller.RegDst])
 
@@ -137,6 +140,19 @@ class MIPSSimulator():
         
         self.pc.writeOutput()
     
+        opcode = self.instructionMemory.oppcode.value
+        is_branch = self.controller.Branch.value == 1
+        zero = self.alu.zero.value
+        
+        branch_taken = 0
+        if is_branch:
+            if opcode == 4 and zero == 1:   # beq
+                branch_taken = 1
+            elif opcode == 5 and zero == 0: # bne
+                branch_taken = 1
+                
+        self.muxPCSrc.controlSignal.value = branch_taken
+
         for elem in self.elements:
             elem.writeOutput()
 
