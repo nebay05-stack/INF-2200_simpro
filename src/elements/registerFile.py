@@ -1,8 +1,9 @@
 '''
 Code written for inf-2200, University of Tromso
 '''
-from commo
+
 from elements.cpuElement import CPUElement
+import common
 from typing import List
 from common import Value
 
@@ -46,6 +47,7 @@ class RegisterFile(CPUElement):
         if self.reg_write.value == 1:
             reg_dest = self.writeregister.value
             data_to_write = self.writedata.value
+
         
             if reg_dest != 0: 
                 self.register[reg_dest] = data_to_write & 0xFFFFFFFF

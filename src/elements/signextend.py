@@ -34,11 +34,9 @@ class Shiftleft(CPUElement):
     def connectInputs(self, inputs: List[Value]):
         assert len(inputs) == 1, 'shiftleft should have one inputs'
         
-        # Inputs
         self.value_a = inputs[0]
         
     def writeOutput(self):
-        # Output values
         assert isinstance(self.value_a.value, int) 
         self.result.value = (self.value_a.value << 2) & 0xFFFFFFFF
 
