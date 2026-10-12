@@ -2,7 +2,7 @@ from elements.cpuElement import CPUElement
 from typing import List
 from common import Value
 
-class Shift_left(CPUElement):
+class Shiftleft(CPUElement):
     def __init__(self):
         #Input
         self.input_val: Value = Value(0)

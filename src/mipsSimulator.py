@@ -19,13 +19,13 @@ from elements.slt import Slt
 from elements.sw import Sw
 from elements.break_op import Break_op
 from elements.mux import Mux
+from elements.s
 from elements.controll_unit import Controller
 from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
 from elements.dataMemory import DataMemory
 from elements.constant import Constant
 from elements.signextend import Signextend
-from elements.shift
 from elements.alu_kontroller import AluController
 from elements.alu import Alu
 
