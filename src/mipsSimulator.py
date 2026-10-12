@@ -4,7 +4,6 @@ Code written for inf-2200, University of Tromso
 from common import Value, Break
 from elements.pc import PC
 from elements.add import Add
-from elements.addiu import Addiu
 from elements.sub import Sub
 from elements.subu import Subu
 from elements.andop import Andop
@@ -19,13 +18,12 @@ from elements.slt import Slt
 from elements.sw import Sw
 from elements.break_op import Break_op
 from elements.mux import Mux
-from elements.s
 from elements.controll_unit import Controller
 from elements.registerFile import RegisterFile
 from elements.instructionMemory import InstructionMemory
 from elements.dataMemory import DataMemory
 from elements.constant import Constant
-from elements.signextend import Signextend
+from elements.signextend import Signextend, Shiftleft
 from elements.alu_kontroller import AluController
 from elements.alu import Alu
 
@@ -54,7 +52,6 @@ class MIPSSimulator():
         self.muxALUSrc = Mux()
         self.adder = Add()
         self.branch_adder = Add()
-        self.adder_iu = Addiu()
         self.sub = Sub()
         self.subu = Subu()
         self.andop = Andop()
@@ -67,13 +64,14 @@ class MIPSSimulator():
         self.slt = Slt()
         self.sw = Sw(self.dataMemory)
         self.signextend = Signextend()
+        self.shiftleft = Shiftleft()
         self.alu = Alu()
         self.alu_kontroller = AluController()
 
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
-        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.branch_adder, self.muxPCSrc, self.brake]
+        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.shiftleft, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.branch_adder, self.muxPCSrc, self.brake]
 
         self._connectCPUElements()
 
@@ -86,7 +84,8 @@ class MIPSSimulator():
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
         self.brake.connectInputs([self.instructionMemory.function])
-        self.branch_adder.connectInputs([self.adder.result, self.signextend.result])
+        self.shiftleft.connectInputs([self.signextend.result])
+        self.branch_adder.connectInputs([self.adder.result, self.shiftleft.result])
         
         self.muxRegDst.connectInputs([self.instructionMemory.rt, self.instructionMemory.rd, self.controller.RegDst])
 

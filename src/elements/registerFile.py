@@ -1,7 +1,7 @@
 '''
 Code written for inf-2200, University of Tromso
 '''
-
+from commo
 from elements.cpuElement import CPUElement
 from typing import List
 from common import Value
