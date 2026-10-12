@@ -1,3 +1,4 @@
+import common  
 from common import Value
 from elements.cpuElement import CPUElement
 from typing import List
