@@ -39,6 +39,9 @@ class Shiftleft(CPUElement):
         
     def writeOutput(self):
         assert isinstance(self.value_a.value, int) 
-        self.result.value = (self.value_a.value << 2) & 0xFFFFFFFF
+        signed_value = common.fromUnsignedWordToSignedWord(self.value_a.value)
+
+        self.result.value = (signed_value << 2) & 0xFFFFFFFF
+
 
         

@@ -1,17 +1,20 @@
 from typing import List
 from common import Value
 from .cpuElement import CPUElement
+Max_int_value = 2147483647
+Min_int_value = -2147483648
 
 class Alu(CPUElement):
     def __init__(self):
-        # Inputs
+        #Inputs
         self.source_1: Value = Value(0)
         self.source_2: Value = Value(0)
         self.alu_control: Value = Value(0)
         
-        # Outputs
-        self.result: Value = Value(0)
-        self.zero: Value = Value(0)
+        #Outputs
+        self.result= Value(0)
+        self.zero = Value(0)
+        self.overflow = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
         assert len(inputs) == 3, "alu should have 3 inputs"
@@ -20,33 +23,61 @@ class Alu(CPUElement):
         self.alu_control = inputs[2]
 
     def writeOutput(self):
-        v1 = self.source_1.value
-        v2 = self.source_2.value
-        four_bit = self.alu_control.value
-
         assert isinstance(self.source_1.value, int) and isinstance(self.source_2.value, int)
+        four_bit = self.alu_control.value
+        val_1 = self.source_1.value
+        val_2 = self.source_2.value
 
+        res_1 = 0
         res = 0
+        self.overflow.value = 0
+        
 
-        #utfør operasjon basert på alu control-input fra tabellen
-        if four_bit == 0b0010: #addisjon
-            res = self.source_1.value + self.source_2.value
-        elif four_bit == 0b0110: #subtraksjon
-            res = (self.source_1.value - self.source_2.value) & 0xffffffff
+        #utfør operasjon basert på alu control input fra tabellen
+        if four_bit == 0b0010: #add
+            if val_1 < 0:
+                pass
+            elif (val_1 & 0x80000000):
+                val_1 = val_1 - 0x100000000
+            if val_2 < 0:
+                pass
+            elif (val_2 & 0x80000000):
+                val_2 = val_2 - 0x100000000
+            res_1 = val_1 + val_2
+            if res_1 > Max_int_value or res_1 < Min_int_value:
+                self.overflow.value = 1
+            res = res_1 & 0xffffffff
+        elif four_bit == 0b0110: #sub
+            if val_1 < 0:
+                pass
+            elif (val_1 & 0x80000000):
+                val_1 = val_1 - 0x100000000
+            if val_2 < 0:
+                pass
+            elif (val_2 & 0x80000000):
+                val_2 = val_2 - 0x100000000
+            res_1 = val_1 - val_2
+            if res_1 > Max_int_value or res_1 < Min_int_value:
+                self.overflow.value = 1
+            res = res_1 & 0xffffffff
         elif four_bit == 0b0000: #and
             res = (self.source_1.value & self.source_2.value) & 0xffffffff
         elif four_bit == 0b0001: #or
             res = (self.source_1.value | self.source_2.value) & 0xffffffff
         elif four_bit == 0b0111: #slt
-            res = 1 if self.source_1.value < self.source_2.value else 0
+            if self.source_1.value < self.source_2.value:
+                res = 1
+            else:
+                res = 0
         elif four_bit == 0b1100:
             res = ~(self.source_1.value | self.source_2.value) & 0xffffffff
         elif four_bit == 0b1111:
-            res = (v2 << 16) & 0xFFFFFFFF
+            res = (self.source_2.value << 16) & 0xFFFFFFFF
         else:
             res = 0 
             
 
+        print(f"VAL_1 type: {type(val_1)}, value: {val_1}, negative check: {val_1 < 0}")
         self.result.value = res 
         if res == 0:
             self.zero.value = 1

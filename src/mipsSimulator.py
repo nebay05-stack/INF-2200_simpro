@@ -1,7 +1,7 @@
 '''
 Code written for inf-2200, University of Tromso
 '''
-from common import Value, Break
+from common import Value, Break, Overflow
 from elements.pc import PC
 from elements.add import Add
 from elements.sub import Sub
@@ -26,6 +26,7 @@ from elements.constant import Constant
 from elements.signextend import Signextend, Shiftleft
 from elements.alu_kontroller import AluController
 from elements.alu import Alu
+
 
 
 class MIPSSimulator():
@@ -71,7 +72,7 @@ class MIPSSimulator():
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
-        self.elements = [self.constant3, self.constant4, self.instructionMemory, self.controller, self.registerFile, self.signextend, self.shiftleft, self.muxRegDst ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.adder, self.branch_adder, self.muxPCSrc, self.brake]
+        self.elements = [self.pc, self.constant3, self.constant4, self.adder, self.instructionMemory, self.controller, self.signextend, self.shiftleft, self.branch_adder, self.muxRegDst, self.registerFile ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.muxPCSrc, self.brake]
 
         self._connectCPUElements()
 
@@ -80,7 +81,7 @@ class MIPSSimulator():
         self.constant4.connectInputs([])
         self.pc.connectInputs([self.muxPCSrc.output])
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
-        self.muxPCSrc.connectInputs([self.adder.result, self.branch_adder.result, self.muxPCSrc.controlSignal])
+        self.muxPCSrc.connectInputs([self.adder.result, self.branch_adder.result, self.controller.Branch])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
         self.brake.connectInputs([self.instructionMemory.function])
@@ -136,24 +137,32 @@ class MIPSSimulator():
         '''Execute one clock cycle of pipeline.'''
         
         self.nCycles += 1
+
+        for elem in self.elements:
+            elem.writeOutput()
+
         
-        self.pc.writeOutput()
-    
         opcode = self.instructionMemory.oppcode.value
+        function = self.instructionMemory.function.value
+        r_type = (opcode == 0 and (function == 0b100010 or function == 0b100000))
+        i_type = opcode == 8
+                
+        if r_type or i_type:
+            if self.alu.overflow.value == 1:
+                raise Overflow("overflow detected")
+    
         is_branch = self.controller.Branch.value == 1
         zero = self.alu.zero.value
         
         branch_taken = 0
         if is_branch:
-            if opcode == 4 and zero == 1:   # beq
+            if opcode == 4 and zero == 1: #beq
                 branch_taken = 1
-            elif opcode == 5 and zero == 0: # bne
+            elif opcode == 5 and zero == 0: #bne
                 branch_taken = 1
                 
         self.muxPCSrc.controlSignal.value = branch_taken
-
-        for elem in self.elements:
-            elem.writeOutput()
+        self.muxPCSrc.writeOutput()
 
         self.registerFile.writeOutput()
 
