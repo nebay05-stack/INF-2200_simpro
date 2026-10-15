@@ -16,11 +16,9 @@ class JumpSlicer(CPUElement):
         
         # Inputs
         self.pc_plus_4 = inputs[0]
-        self.shifted_jump_adress = inputs[0]
+        self.shifted_jump_adress = inputs[1]
         
     def writeOutput(self):
         # Output values
         assert isinstance(self.pc_plus_4.value, int) and isinstance(self.shifted_jump_adress.value, int)
-
-        highestpc_4 = top_4_pc = self.pc_plus_4 & 0xF0000000
-        self.full_jump_adress = highestpc_4 | self.shifted_jump_adress
+        self.full_jump_adress.value = (self.pc_plus_4.value & 0xF0000000) | self.shifted_jump_adress.value

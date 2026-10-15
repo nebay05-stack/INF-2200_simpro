@@ -35,38 +35,14 @@ class Alu(CPUElement):
         
 
         #utfør operasjon basert på alu control input fra tabellen
-        if four_bit == 0b0010: #add
-            res_1 = val_1 + val_2
-            print(f"Add instruction val1: {val_1} val2: {val_2} result: {res_1}\n")
-            if res_1 > Max_int_value or res_1 < Min_int_value:
-                pass
-            res = res_1 & 0xffffffff
-                #raise Overflow("overflow feil")
-
-            # res_1 = val_1 + val_2
-            # # ##if res_1 > Max_int_value or res_1 < Min_int_value:
-            # if (val_1 & 0x80000000) == 0:
-            #     if (val_2 & 0x80000000) == 0:
-            #         if (res_1 & 0x80000000) > 0:
-            #             raise Overflow("overflow feil")
-            # if (val_1 & 0x80000000) > 0:
-            #     if (val_2 & 0x80000000) > 0:
-            #         if (res_1 & 0x80000000) == 0:   
-            #             raise Overflow("overflow feil")
-            # res = res_1 & 0xffffffff
-            # print(f"{res}")
-        elif four_bit == 0b0110: #sub
-            res_1 = val_1 - val_2
-            print(f"Subb instruction val1: {val_1} val2: {val_2} result: {res_1}\n")
-            if res_1 > Max_int_value or res_1 < Min_int_value:
-                pass
-            res = res_1 & 0xffffffff
-                #raise Overflow("overflow feil")
-            # res_1 = val_1 - val_2
-            # if (res_1 & 0x80000000) != (val_1 & 0x80000000):
-            #     if (val_1 & 0x80000000) != (val_2 & 0x80000000):
-            #         raise Overflow("overflow feil")
-            # res = res_1 & 0xffffffff
+        if four_bit == 0b0010: # add
+            res = (val_1 + val_2) & 0xffffffff
+            if ((val_1 & 0x80000000) == (val_2 & 0x80000000)) and ((val_1 & 0x80000000) != (res & 0x80000000)):
+                self.overflow.value = 1
+        elif four_bit == 0b0110: # sub
+            res = (val_1 - val_2) & 0xffffffff
+            if ((val_1 & 0x80000000) != (val_2 & 0x80000000)) and ((val_1 & 0x80000000) != (res & 0x80000000)):
+                self.overflow.value = 1
         elif four_bit == 0b0000: #and
             res = (self.source_1.value & self.source_2.value) & 0xffffffff
         elif four_bit == 0b0001: #or

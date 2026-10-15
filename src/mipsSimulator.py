@@ -13,6 +13,7 @@ from elements.break_op import Break_op
 from elements.j import J
 from elements.lui import Lui
 from elements.lw import Lw
+from elements.sw import Sw
 from elements.nor import Nor
 from elements.slt import Slt
 from elements.break_op import Break_op
@@ -59,15 +60,15 @@ class MIPSSimulator():
         self.andop = Andop()
         self.beq = Beq()
         self.bne = Bne()
-        self.j = J()
         self.lui = Lui()
         self.lw = Lw(self.dataMemory)
         self.nor = Nor()
         self.slt = Slt()
         self.sw = Sw(self.dataMemory)
         self.signextend = Signextend()
-        self.shiftleft2_1 = Shiftleft()
-        self.shiftleft2_2 = Shiftleft()
+        self.shiftleft = Shiftleft()
+        self.shiftleft_jump = Shiftleft()
+        self.jump_slicer = JumpSlicer()
         self.alu = Alu()
         self.alu_kontroller = AluController()
 
@@ -82,7 +83,9 @@ class MIPSSimulator():
             self.instructionMemory, 
             self.controller, 
             self.signextend, 
-            self.shiftleft, 
+            self.shiftleft,
+            self.shiftleft_jump,
+            self.jump_slicer, 
             self.branch_adder, 
             self.muxRegDst, 
             self.muxALUSrc, 
@@ -90,7 +93,8 @@ class MIPSSimulator():
             self.alu, 
             self.dataMemory, 
             self.muxMemtoReg, 
-            self.muxPCSrc, 
+            self.muxPCSrc,
+            self.muxJump, 
             self.brake,
             self.registerFile  
         ]
@@ -99,17 +103,18 @@ class MIPSSimulator():
     def _connectCPUElements(self):
         self.constant3.connectInputs([])
         self.constant4.connectInputs([])
-        self.pc.connectInputs([self.muxPCSrc.output])
+        self.pc.connectInputs([self.muxJump.output])
         self.adder.connectInputs([self.pc.currentAddress, self.constant4.constantValue])
         self.muxPCSrc.connectInputs([self.adder.result, self.branch_adder.result, self.controller.Branch])
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
-        self.brake.connectInputs([self.instructionMemory.function])
-        self.shiftleft2_1.connectInputs([self.signextend.result])
-        self.branch_adder.connectInputs([self.adder.result, self.shiftleft2_1.result])
+        self.brake.connectInputs([self.instructionMemory.oppcode ,self.instructionMemory.function])
+        self.shiftleft.connectInputs([self.signextend.result])
+        self.branch_adder.connectInputs([self.adder.result, self.shiftleft.result])
 
-        self.shiftleft2_2.connectInputs([self.instructionMemory.jump_addres])
-        self.muxJump.connectInputs([self.])
+        self.shiftleft_jump.connectInputs([self.instructionMemory.jump_addres])
+        self.jump_slicer.connectInputs([self.adder.result, self.shiftleft_jump.result])
+        self.muxJump.connectInputs([self.muxPCSrc.output, self.jump_slicer.full_jump_adress, self.controller.Jump])
         
         self.muxRegDst.connectInputs([self.instructionMemory.rt, self.instructionMemory.rd, self.controller.RegDst])
 
@@ -181,22 +186,20 @@ class MIPSSimulator():
                         branch_taken = 1
 
                 self.muxPCSrc.controlSignal.value = branch_taken
+
+                is_jump = 1 if opcode == 2 else 0
+                self.muxJump.controlSignal.value = is_jump
+
         
+        function = self.instructionMemory.function.value
 
-                
+        r_type = (opcode == 0 and (function == 0b100010 or function == 0b100000))
+        i_type = opcode == 8
+                            
+        if r_type or i_type:
+            if self.alu.overflow.value == 1:
+                raise Overflow("overflow detected")
         
-        print(f"PC: {self.pc.currentAddress.value} | Opcode: {opcode} | Zero: {zero} | IsBranch: {is_branch} | BranchTaken: {branch_taken}")
-
-
         if self.brake.full_stop.value == 1:
             raise Break("Break instruction encountered")
         
-        
-        
-        # function = self.instructionMemory.function.value
-        # r_type = (opcode == 0 and (function == 0b100010 or function == 0b100000))
-        # i_type = opcode == 8
-                
-        # if r_type or i_type:
-        #     if self.alu.overflow.value == 1:
-        #         raise Overflow("overflow detected")
