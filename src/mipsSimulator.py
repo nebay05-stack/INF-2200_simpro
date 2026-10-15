@@ -15,7 +15,6 @@ from elements.lui import Lui
 from elements.lw import Lw
 from elements.nor import Nor
 from elements.slt import Slt
-from elements.sw import Sw
 from elements.break_op import Break_op
 from elements.mux import Mux
 from elements.controll_unit import Controller
@@ -26,6 +25,7 @@ from elements.constant import Constant
 from elements.signextend import Signextend, Shiftleft
 from elements.alu_kontroller import AluController
 from elements.alu import Alu
+from elements.jump_slicer import JumpSlicer
 
 
 
@@ -51,6 +51,7 @@ class MIPSSimulator():
         self.muxRegDst = Mux()
         self.muxMemtoReg = Mux()
         self.muxALUSrc = Mux()
+        self.muxJump = Mux()
         self.adder = Add()
         self.branch_adder = Add()
         self.sub = Sub()
@@ -65,15 +66,34 @@ class MIPSSimulator():
         self.slt = Slt()
         self.sw = Sw(self.dataMemory)
         self.signextend = Signextend()
-        self.shiftleft = Shiftleft()
+        self.shiftleft2_1 = Shiftleft()
+        self.shiftleft2_2 = Shiftleft()
         self.alu = Alu()
         self.alu_kontroller = AluController()
 
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 
-        self.elements = [self.pc, self.constant3, self.constant4, self.adder, self.instructionMemory, self.controller, self.signextend, self.shiftleft, self.branch_adder, self.muxRegDst, self.registerFile ,self.muxALUSrc, self.alu_kontroller, self.alu, self.dataMemory, self.muxMemtoReg, self.muxPCSrc, self.brake]
-
+        self.elements = [
+            self.pc, 
+            self.constant3, 
+            self.constant4, 
+            self.adder, 
+            self.instructionMemory, 
+            self.controller, 
+            self.signextend, 
+            self.shiftleft, 
+            self.branch_adder, 
+            self.muxRegDst, 
+            self.muxALUSrc, 
+            self.alu_kontroller, 
+            self.alu, 
+            self.dataMemory, 
+            self.muxMemtoReg, 
+            self.muxPCSrc, 
+            self.brake,
+            self.registerFile  
+        ]
         self._connectCPUElements()
 
     def _connectCPUElements(self):
@@ -85,8 +105,11 @@ class MIPSSimulator():
         self.instructionMemory.connectInputs([self.pc.currentAddress])
         self.controller.connectInputs([self.instructionMemory.oppcode])
         self.brake.connectInputs([self.instructionMemory.function])
-        self.shiftleft.connectInputs([self.signextend.result])
-        self.branch_adder.connectInputs([self.adder.result, self.shiftleft.result])
+        self.shiftleft2_1.connectInputs([self.signextend.result])
+        self.branch_adder.connectInputs([self.adder.result, self.shiftleft2_1.result])
+
+        self.shiftleft2_2.connectInputs([self.instructionMemory.jump_addres])
+        self.muxJump.connectInputs([self.])
         
         self.muxRegDst.connectInputs([self.instructionMemory.rt, self.instructionMemory.rd, self.controller.RegDst])
 
@@ -141,30 +164,39 @@ class MIPSSimulator():
         for elem in self.elements:
             elem.writeOutput()
 
-        
-        opcode = self.instructionMemory.oppcode.value
-        function = self.instructionMemory.function.value
-        r_type = (opcode == 0 and (function == 0b100010 or function == 0b100000))
-        i_type = opcode == 8
-                
-        if r_type or i_type:
-            if self.alu.overflow.value == 1:
-                raise Overflow("overflow detected")
-    
-        is_branch = self.controller.Branch.value == 1
-        zero = self.alu.zero.value
-        
-        branch_taken = 0
-        if is_branch:
-            if opcode == 4 and zero == 1: #beq
-                branch_taken = 1
-            elif opcode == 5 and zero == 0: #bne
-                branch_taken = 1
-                
-        self.muxPCSrc.controlSignal.value = branch_taken
-        self.muxPCSrc.writeOutput()
+            if elem == self.instructionMemory:
+                self.registerFile.read_register()
 
-        self.registerFile.writeOutput()
+            if elem == self.alu:
+                opcode = self.instructionMemory.oppcode.value
+                is_branch = self.controller.Branch.value == 1
+                zero = self.alu.zero.value
+
+
+                branch_taken = 0
+                if is_branch:
+                    if opcode == 4 and zero == 1: #beq
+                        branch_taken = 1
+                    elif opcode == 5 and zero == 0: #bne
+                        branch_taken = 1
+
+                self.muxPCSrc.controlSignal.value = branch_taken
+        
+
+                
+        
+        print(f"PC: {self.pc.currentAddress.value} | Opcode: {opcode} | Zero: {zero} | IsBranch: {is_branch} | BranchTaken: {branch_taken}")
+
 
         if self.brake.full_stop.value == 1:
             raise Break("Break instruction encountered")
+        
+        
+        
+        # function = self.instructionMemory.function.value
+        # r_type = (opcode == 0 and (function == 0b100010 or function == 0b100000))
+        # i_type = opcode == 8
+                
+        # if r_type or i_type:
+        #     if self.alu.overflow.value == 1:
+        #         raise Overflow("overflow detected")

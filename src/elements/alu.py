@@ -1,5 +1,5 @@
 from typing import List
-from common import Value
+from common import Value, Overflow
 from .cpuElement import CPUElement
 Max_int_value = 2147483647
 Min_int_value = -2147483648
@@ -25,6 +25,7 @@ class Alu(CPUElement):
     def writeOutput(self):
         assert isinstance(self.source_1.value, int) and isinstance(self.source_2.value, int)
         four_bit = self.alu_control.value
+        
         val_1 = self.source_1.value
         val_2 = self.source_2.value
 
@@ -35,31 +36,37 @@ class Alu(CPUElement):
 
         #utfør operasjon basert på alu control input fra tabellen
         if four_bit == 0b0010: #add
-            if val_1 < 0:
-                pass
-            elif (val_1 & 0x80000000):
-                val_1 = val_1 - 0x100000000
-            if val_2 < 0:
-                pass
-            elif (val_2 & 0x80000000):
-                val_2 = val_2 - 0x100000000
             res_1 = val_1 + val_2
+            print(f"Add instruction val1: {val_1} val2: {val_2} result: {res_1}\n")
             if res_1 > Max_int_value or res_1 < Min_int_value:
-                self.overflow.value = 1
+                pass
             res = res_1 & 0xffffffff
+                #raise Overflow("overflow feil")
+
+            # res_1 = val_1 + val_2
+            # # ##if res_1 > Max_int_value or res_1 < Min_int_value:
+            # if (val_1 & 0x80000000) == 0:
+            #     if (val_2 & 0x80000000) == 0:
+            #         if (res_1 & 0x80000000) > 0:
+            #             raise Overflow("overflow feil")
+            # if (val_1 & 0x80000000) > 0:
+            #     if (val_2 & 0x80000000) > 0:
+            #         if (res_1 & 0x80000000) == 0:   
+            #             raise Overflow("overflow feil")
+            # res = res_1 & 0xffffffff
+            # print(f"{res}")
         elif four_bit == 0b0110: #sub
-            if val_1 < 0:
-                pass
-            elif (val_1 & 0x80000000):
-                val_1 = val_1 - 0x100000000
-            if val_2 < 0:
-                pass
-            elif (val_2 & 0x80000000):
-                val_2 = val_2 - 0x100000000
             res_1 = val_1 - val_2
+            print(f"Subb instruction val1: {val_1} val2: {val_2} result: {res_1}\n")
             if res_1 > Max_int_value or res_1 < Min_int_value:
-                self.overflow.value = 1
+                pass
             res = res_1 & 0xffffffff
+                #raise Overflow("overflow feil")
+            # res_1 = val_1 - val_2
+            # if (res_1 & 0x80000000) != (val_1 & 0x80000000):
+            #     if (val_1 & 0x80000000) != (val_2 & 0x80000000):
+            #         raise Overflow("overflow feil")
+            # res = res_1 & 0xffffffff
         elif four_bit == 0b0000: #and
             res = (self.source_1.value & self.source_2.value) & 0xffffffff
         elif four_bit == 0b0001: #or
@@ -77,9 +84,9 @@ class Alu(CPUElement):
             res = 0 
             
 
-        print(f"VAL_1 type: {type(val_1)}, value: {val_1}, negative check: {val_1 < 0}")
+        #print(f"VAL_1 type: {type(val_1)}, value: {val_1}, negative check: {val_1 < 0}")
         self.result.value = res 
         if res == 0:
-            self.zero.value = 1
+           self.zero.value = 1
         else:
-            self.zero.value = 0
+           self.zero.value = 0

@@ -38,12 +38,14 @@ class RegisterFile(CPUElement):
         self.writedata = inputs[3]
         self.reg_write = inputs[4]
 
-    def writeOutput(self):
-        assert isinstance(self.readregister_1.value, int) and isinstance(self.readregister_2.value, int)
-        
+    def read_register(self):
         self.readdata_1.value = self.register.get(self.readregister_1.value, 0)
         self.readdata_2.value = self.register.get(self.readregister_2.value, 0)
 
+
+    def writeOutput(self):
+        assert isinstance(self.readregister_1.value, int) and isinstance(self.readregister_2.value, int)
+        
         if self.reg_write.value == 1:
             reg_dest = self.writeregister.value
             data_to_write = self.writedata.value
@@ -51,6 +53,8 @@ class RegisterFile(CPUElement):
         
             if reg_dest != 0: 
                 self.register[reg_dest] = data_to_write & 0xFFFFFFFF
+        
+            print(f"SKRIVER TIL REGISTER: {reg_dest} med verdi: {data_to_write}")
         
 
         

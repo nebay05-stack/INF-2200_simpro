@@ -25,22 +25,22 @@ class AluController(CPUElement):
             self.alu_control_out.value = 0b0010
         elif op == 0b01:
             self.alu_control_out.value = 0b0110
-        if op == 0b11: #lui
+        elif op == 0b11: #lui
             self.alu_control_out.value = 0b1111
             
         #ALUOp er 10 (R-type) se på fuction kode for spesifik opperajon
         elif op == 0b10:
-            if fn == 0b100000 or fn == 0b100001:     #add eller addu
+            if fn == 0b100000 or fn == 0b100001: #add eller addu
                 self.alu_control_out.value = 0b0010
-            elif fn == 0b100010 or fn == 0b100011:   #sub eller subu
+            elif fn == 0b100010 or fn == 0b100011: #sub eller subu
                 self.alu_control_out.value = 0b0110
-            elif fn == 0b100100:   # and[cite: 1]
+            elif fn == 0b100100: #and
                 self.alu_control_out.value = 0b0000
-            elif fn == 0b100101:   # or[cite: 1]
+            elif fn == 0b100101: #or
                 self.alu_control_out.value = 0b0001
-            elif fn == 0b101010:   # slt (set on less than)[cite: 1]
+            elif fn == 0b101010: #slt
                 self.alu_control_out.value = 0b0111
-            elif fn == 0b100111:   # nor
+            elif fn == 0b100111: #nor
                 self.alu_control_out.value = 0b1100
             else:
                 self.alu_control_out.value = 0b0000

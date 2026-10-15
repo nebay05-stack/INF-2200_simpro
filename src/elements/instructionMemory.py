@@ -21,6 +21,7 @@ class InstructionMemory(Memory):
         self.rt = Value(0)
         self.imidiat = Value(0) 
         self.function = Value(0)
+        self.jump_addres = Value(0)
         
     
     def connectInputs(self, inputs: List[Value]):
@@ -39,5 +40,6 @@ class InstructionMemory(Memory):
         self.rd.value = (instruction >> 11) & 0x1f
         self.imidiat.value = (instruction >> 0) & 0xffff
         self.function.value = instruction & 0x3f
+        self.jump_addres.value = instruction & 0x03FFFFFF
 
         print(f"PC: {self.Readaddres.value} | rs: {self.rs.value}, rt: {self.rt.value}")
