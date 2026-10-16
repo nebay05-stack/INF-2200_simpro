@@ -1,21 +1,10 @@
 '''
 Code written for inf-2200, University of Tromso
 '''
-from common import Value, Break, Overflow
+from common import Break, Overflow
 from elements.pc import PC
 from elements.add import Add
-from elements.sub import Sub
-from elements.subu import Subu
-from elements.andop import Andop
-from elements.beq import Beq
-from elements.bne import Bne
 from elements.break_op import Break_op
-from elements.j import J
-from elements.lui import Lui
-from elements.lw import Lw
-from elements.sw import Sw
-from elements.nor import Nor
-from elements.slt import Slt
 from elements.break_op import Break_op
 from elements.mux import Mux
 from elements.controll_unit import Controller
@@ -44,7 +33,6 @@ class MIPSSimulator():
         self.dataMemory = DataMemory(memoryFileName)
         self.instructionMemory = InstructionMemory(memoryFileName)
         self.registerFile = RegisterFile()
-
         self.constant3 = Constant(3)
         self.constant4 = Constant(4)
         self.controller = Controller()
@@ -55,23 +43,12 @@ class MIPSSimulator():
         self.muxJump = Mux()
         self.adder = Add()
         self.branch_adder = Add()
-        self.sub = Sub()
-        self.subu = Subu()
-        self.andop = Andop()
-        self.beq = Beq()
-        self.bne = Bne()
-        self.lui = Lui()
-        self.lw = Lw(self.dataMemory)
-        self.nor = Nor()
-        self.slt = Slt()
-        self.sw = Sw(self.dataMemory)
         self.signextend = Signextend()
         self.shiftleft = Shiftleft()
         self.shiftleft_jump = Shiftleft()
         self.jump_slicer = JumpSlicer()
         self.alu = Alu()
         self.alu_kontroller = AluController()
-
         self.brake = Break_op()
         self.pc = PC(self.startAddress())
 

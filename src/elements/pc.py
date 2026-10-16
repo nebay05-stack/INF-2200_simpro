@@ -24,5 +24,4 @@ class PC(CPUElement):
         self.incomingAddress.value = self.baseaddr
         
     def writeOutput (self):
-        # pc is updated by the input source
         self.currentAddress.value = self.incomingAddress.value

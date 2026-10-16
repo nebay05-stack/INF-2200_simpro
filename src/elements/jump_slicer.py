@@ -19,6 +19,5 @@ class JumpSlicer(CPUElement):
         self.shifted_jump_adress = inputs[1]
         
     def writeOutput(self):
-        # Output values
         assert isinstance(self.pc_plus_4.value, int) and isinstance(self.shifted_jump_adress.value, int)
         self.full_jump_adress.value = (self.pc_plus_4.value & 0xF0000000) | self.shifted_jump_adress.value

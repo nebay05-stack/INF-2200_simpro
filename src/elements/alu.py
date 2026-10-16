@@ -35,11 +35,11 @@ class Alu(CPUElement):
         
 
         #utfør operasjon basert på alu control input fra tabellen
-        if four_bit == 0b0010: # add
+        if four_bit == 0b0010: #add
             res = (val_1 + val_2) & 0xffffffff
             if ((val_1 & 0x80000000) == (val_2 & 0x80000000)) and ((val_1 & 0x80000000) != (res & 0x80000000)):
                 self.overflow.value = 1
-        elif four_bit == 0b0110: # sub
+        elif four_bit == 0b0110: #sub
             res = (val_1 - val_2) & 0xffffffff
             if ((val_1 & 0x80000000) != (val_2 & 0x80000000)) and ((val_1 & 0x80000000) != (res & 0x80000000)):
                 self.overflow.value = 1
