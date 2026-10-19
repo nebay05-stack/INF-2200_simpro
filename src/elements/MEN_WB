@@ -1,0 +1,36 @@
+from typing import List
+from common import Value
+from .cpuElement import CPUElement
+
+
+class Mem_wb(CPUElement):
+    def __init__(self):
+        #Inputs
+        self.read_data_inp: Value = Value(0)
+        self.alu_result_inp: Value = Value(0)
+
+        self.stall_signal: Value = Value(0)
+        self.flush_signal: Value = Value(0)
+        
+        #Outputs
+        self.read_data_out = Value(0)
+        self.alu_result_out = Value(0)
+    def connectInputs(self, inputs: List[Value]):
+        assert len(inputs) == 4, "mem/wb should have 4 inputs"
+        self.read_data_inp = inputs[0]
+        self.alu_result_inp = inputs[1]
+        self.stall_signal = inputs[2]
+        self.flush_signal = inputs[3]
+        
+
+    def writeOutput(self):
+        assert isinstance(self.read_data_inp.value, int) and isinstance(self.alu_result_inp.value, int) and isinstance(self.stall_signal.value, int) and isinstance(self.flush_signal.value, int)
+
+        if self.flush_signal.value == 1:
+            self.read_data_out.value = 0
+            self.alu_result_out.value = 0
+        elif self.stall_signal.value == 1:
+            pass
+        else:
+            self.read_data_out.value = self.read_data_inp.value
+            self.alu_result_out.value = self.alu_result_inp.value

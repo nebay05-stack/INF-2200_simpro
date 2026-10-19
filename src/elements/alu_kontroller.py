@@ -28,7 +28,7 @@ class AluController(CPUElement):
         elif op == 0b11: #lui
             self.alu_control_out.value = 0b1111
             
-        #ALUOp er 10 (R-type) se på fuction kode for spesifik opperajon
+        #ALUOp er 10 (R-type), se på fuction kode for spesifik opperajon
         elif op == 0b10:
             if fn == 0b100000 or fn == 0b100001: #add eller addu
                 self.alu_control_out.value = 0b0010

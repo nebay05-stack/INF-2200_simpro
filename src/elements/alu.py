@@ -58,9 +58,8 @@ class Alu(CPUElement):
             res = (self.source_2.value << 16) & 0xFFFFFFFF
         else:
             res = 0 
-            
 
-        #print(f"VAL_1 type: {type(val_1)}, value: {val_1}, negative check: {val_1 < 0}")
+    
         self.result.value = res 
         if res == 0:
            self.zero.value = 1
