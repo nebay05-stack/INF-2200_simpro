@@ -32,7 +32,7 @@ class Alu(CPUElement):
         res_1 = 0
         res = 0
         self.overflow.value = 0
-        
+
 
         #utfør operasjon basert på alu control input fra tabellen
         if four_bit == 0b0010: #add

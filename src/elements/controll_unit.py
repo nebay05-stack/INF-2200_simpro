@@ -18,7 +18,7 @@ class Controller(CPUElement):
         self.ALUSrc: Value = Value(0)
         self.RegWrite: Value = Value(0)
         self.Jump: Value = Value(0)
-        self.Break: Value = Value(0)
+        
 
     def connectInputs(self, inputs: List[Value]):
         assert len(inputs) == 1, 'controller should have one inputs'
@@ -37,9 +37,10 @@ class Controller(CPUElement):
         self.ALUSrc.value = 0
         self.RegWrite.value = 0
         self.Jump.value = 0
-        self.Break.value = 0
+        
 
         oppcode = self.oppcode.value
+        print(f"DEBUG CONTROLLER -> Mottatt oppcode: {oppcode}")
 
         if oppcode == 0: #alle r-type instruksjoner
             self.RegDst.value = 1

@@ -12,16 +12,19 @@ class PC(CPUElement):
         
         # Input
         self.incomingAddress: Value = Value(0)
+        self.pc_write: Value = Value(0)
         
         # Output
         self.currentAddress: Value = Value(0)
     
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 1, 'PC should have one input'
+        assert len(inputs) == 2, 'PC should have 2 input'
         
         # Input
         self.incomingAddress = inputs[0]
+        self.pc_write = inputs[1]
         self.incomingAddress.value = self.baseaddr
         
     def writeOutput (self):
-        self.currentAddress.value = self.incomingAddress.value
+        if self.pc_write.value == 1:
+            self.currentAddress.value = self.incomingAddress.value

@@ -41,5 +41,3 @@ class InstructionMemory(Memory):
         self.imidiat.value = (instruction >> 0) & 0xffff
         self.function.value = instruction & 0x3f
         self.jump_addres.value = instruction & 0x03FFFFFF
-
-        print(f"PC: {self.Readaddres.value} | rs: {self.rs.value}, rt: {self.rt.value}")
