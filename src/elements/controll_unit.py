@@ -40,7 +40,6 @@ class Controller(CPUElement):
         
 
         oppcode = self.oppcode.value
-        print(f"DEBUG CONTROLLER -> Mottatt oppcode: {oppcode}")
 
         if oppcode == 0: #alle r-type instruksjoner
             self.RegDst.value = 1

@@ -12,7 +12,7 @@ class JumpSlicer(CPUElement):
         self.full_jump_adress = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 2, 'jump_slicer should have two inputs'
+        assert len(inputs) == 2, 'jump_slicer should have 2 inputs'
         
         # Inputs
         self.pc_plus_4 = inputs[0]
