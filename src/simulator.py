@@ -3,8 +3,6 @@ Code written for inf-2200, University of Tromso
 '''
 
 import sys
-from elements import controll_unit
-from elements import Mux
 from mipsSimulator import MIPSSimulator
 
 
