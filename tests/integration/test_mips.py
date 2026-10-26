@@ -178,7 +178,7 @@ class TestMips():
                     "break1.mem", "break2.mem", "jump1.mem", "jump2.mem", "lui1.mem", "lui2.mem",
                     "lw.mem", "nop.mem", "nor1.mem", "nor2.mem", "or1.mem", "or2.mem",
                     "slt.mem", "sub1.mem", "sub2.mem", "subu.mem", "sw1.mem", "sw2.mem"]
-    trapTestFiles = ["trap_add.mem", "trap_sub1.mem", "trap_sub2.mem"]
+    trapTestFiles = ["trap_add.mem", "trap_sub1.mem", "trap_sub2.mem", "stall.mem", "control.mem"]
     mipsWrapper = None
     currentSubTest = None
     trap = True

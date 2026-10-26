@@ -3,16 +3,18 @@ Code written for inf-2200, University of Tromso
 '''
 
 import sys
-from mipsSimulator import MIPSSimulator
+from mipsSimulator import MIPSSimulator, Break
 
 
 
 def runSimulator(sim: MIPSSimulator):
-    # Replace this with your own main loop! 
-
-    while (1):
-        sim.tick()
-        print(hex(sim.pc.currentAddress.value))
+    try:
+        while True:
+            sim.tick()
+    except Break:
+        print("\n--- Programmet er ferdig (Break nådd) ---")
+        sim.printRegisterFile()
+        sim.printDataMemory()
 
 if __name__ == '__main__':
     assert len(sys.argv) == 2, f"Usage: python {sys.argv[0]} memoryFile"

@@ -8,17 +8,17 @@ class Mem_wb(CPUElement):
         #Inputs
         self.read_data_inp: Value = Value(0)
         self.alu_result_inp: Value = Value(0)
-        self.reg_dest_inp: Value = Value(0)
+        self.reg_dst_inp: Value = Value(0)
 
         self.controll_signal_inp: dict[str, Value] = {
-            'MemtoReg': Value(0), 
-            'RegWrite': Value(0)
+            'MemtoReg': Value(0), 'RegWrite': Value(0),
+            'Break': Value(0)
         }
         
         #Outputs
         self.read_data_out = Value(0)
         self.alu_result_out = Value(0)
-        self.reg_dest_out = Value(0)
+        self.reg_dst_out = Value(0)
         self.controll_signal_out: dict[str, Value] ={
             k: Value(0) for k in self.controll_signal_inp
         }
@@ -26,7 +26,7 @@ class Mem_wb(CPUElement):
         assert len(inputs) >= 4, "mem/wb should have 4 inputs"
         self.read_data_inp = inputs[0]
         self.alu_result_inp = inputs[1]
-        self.reg_dest_inp = inputs[2]
+        self.reg_dst_inp = inputs[2]
 
 
         controll_keys = list(self.controll_signal_inp.keys())
@@ -41,7 +41,7 @@ class Mem_wb(CPUElement):
         
         self.read_data_out.value = self.read_data_inp.value
         self.alu_result_out.value = self.alu_result_inp.value
-        self.reg_dest_out.value = self.reg_dest_inp.value
+        self.reg_dst_out.value = self.reg_dst_inp.value
 
         for key in self.controll_signal_inp:
             self.controll_signal_out[key].value = self.controll_signal_inp[key].value

@@ -1,5 +1,5 @@
 import unittest
-from elements.addi import Addi
+from elements.alu_kontroller import AluController
 from common import Value
 
 class TestAddi(unittest.TestCase):

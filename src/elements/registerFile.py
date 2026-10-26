@@ -53,6 +53,8 @@ class RegisterFile(CPUElement):
         
             if reg_dst != 0: 
                 self.register[reg_dst] = data_to_write & 0xFFFFFFFF
+
+        self.read_register()
         
         
 

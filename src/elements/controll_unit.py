@@ -18,6 +18,7 @@ class Controller(CPUElement):
         self.ALUSrc: Value = Value(0)
         self.RegWrite: Value = Value(0)
         self.Jump: Value = Value(0)
+        self.Bne_Bit: Value = Value(0)
         
 
     def connectInputs(self, inputs: List[Value]):
@@ -37,6 +38,7 @@ class Controller(CPUElement):
         self.ALUSrc.value = 0
         self.RegWrite.value = 0
         self.Jump.value = 0
+        self.Bne_Bit.value = 0
         
 
         oppcode = self.oppcode.value
@@ -68,6 +70,7 @@ class Controller(CPUElement):
             self.ALUOp.value = 0b01 
         elif oppcode == 5: #bne
             self.Branch.value = 1 
+            self.Bne_Bit.value = 1
             self.ALUOp.value = 0b01 
         elif oppcode == 2: #j
             self.Jump.value = 1

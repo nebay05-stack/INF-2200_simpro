@@ -1,6 +1,7 @@
 from typing import List
-from common import Value, Overflow
+from common import Value 
 from .cpuElement import CPUElement
+
 Max_int_value = 2147483647
 Min_int_value = -2147483648
 
@@ -23,13 +24,12 @@ class Alu(CPUElement):
         self.alu_control = inputs[2]
 
     def writeOutput(self):
-        assert isinstance(self.source_1.value, int) and isinstance(self.source_2.value, int)
+        assert isinstance(self.source_1.value, int) and isinstance(self.source_2.value, int) and isinstance(self.alu_control.value, int)
         four_bit = self.alu_control.value
         
         val_1 = self.source_1.value
         val_2 = self.source_2.value
 
-        res_1 = 0
         res = 0
         self.overflow.value = 0
 
@@ -44,18 +44,18 @@ class Alu(CPUElement):
             if ((val_1 & 0x80000000) != (val_2 & 0x80000000)) and ((val_1 & 0x80000000) != (res & 0x80000000)):
                 self.overflow.value = 1
         elif four_bit == 0b0000: #and
-            res = (self.source_1.value & self.source_2.value) & 0xffffffff
+            res = (val_1 & val_2) & 0xffffffff
         elif four_bit == 0b0001: #or
-            res = (self.source_1.value | self.source_2.value) & 0xffffffff
+            res = (val_1 | val_2) & 0xffffffff
         elif four_bit == 0b0111: #slt
-            if self.source_1.value < self.source_2.value:
+            if val_1 < val_2:
                 res = 1
             else:
                 res = 0
         elif four_bit == 0b1100:
-            res = ~(self.source_1.value | self.source_2.value) & 0xffffffff
+            res = ~(val_1 | val_2) & 0xffffffff
         elif four_bit == 0b1111:
-            res = (self.source_2.value << 16) & 0xFFFFFFFF
+            res = (val_2 << 16) & 0xFFFFFFFF
         else:
             res = 0 
 
