@@ -1,19 +1,25 @@
 import unittest
-from elements.addiu import Addiu
+from elements.signextend import Signextend
 from common import Value
 
-class TestAddiu(unittest.TestCase):
+class TestSignextend(unittest.TestCase):
     def setUp(self):
-        self.addiuer = Addiu()
-        self.value_a = Value(5)
-        self.value_b = Value(4)
+        self.signextend = Signextend()
         
     def test_connectInputs(self):
-        self.addiuer.connectInputs([self.value_a, self.value_b])
-        self.assertEqual(self.addiuer.value_a.value, 5)
-        self.assertEqual(self.addiuer.value_b.value, 4)
+        input_value = Value(0x0005)
+        self.signextend.connectInputs([input_value])
+        self.assertEqual(input_value.value, 5)
+
+    def write_output_positic(self):
+        input_value = Value(0x0005)
+        self.signextend.connectInputs([input_value])
+        self.signextend.writeOutput()
+        self.assertEqual(self.signextend.result.value, 5)
+
         
     def test_writeOutput(self):
-        self.addiuer.connectInputs([self.value_a, self.value_b])
-        self.addiuer.writeOutput()
-        self.assertEqual(self.addiuer.result.value, 9)
+        input_value = Value(0x8000)
+        self.signextend.connectInputs([input_value])
+        self.signextend.writeOutput()
+        self.assertEqual(self.signextend.result.value, 0xFFFF8000)

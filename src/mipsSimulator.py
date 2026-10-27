@@ -121,7 +121,7 @@ class MIPSSimulator():
         
         self.ex_mem_register.connectInputs([self.alu.result, self.id_ex_register.readdata_2_out, 
                                             self.muxRegDst.output,self.id_ex_register.controll_signal_out['MemtoReg'], self.id_ex_register.controll_signal_out['MemRead'], 
-                                            self.id_ex_register.controll_signal_out['MemWrite'], self.id_ex_register.controll_signal_out['RegWrite'], self.id_ex_register.controll_signal_out['Break'], self.id_ex_register.controll_signal_out['TrapOverflow'], ])
+                                            self.id_ex_register.controll_signal_out['MemWrite'], self.id_ex_register.controll_signal_out['RegWrite'], self.id_ex_register.controll_signal_out['Break']])
 
         self.dataMemory.connectInputs([self.ex_mem_register.alu_result_out, self.ex_mem_register.readdata_2_out, self.ex_mem_register.controll_signal_out['MemRead'], self.ex_mem_register.controll_signal_out['MemWrite']])
 
@@ -130,7 +130,7 @@ class MIPSSimulator():
                                             self.ex_mem_register.controll_signal_out['RegWrite'], self.ex_mem_register.controll_signal_out['Break']])
     
         self.hazard_detection.connectInputs([self.id_ex_register.controll_signal_out['RegWrite'], self.muxRegDst.output, self.ex_mem_register.controll_signal_out['RegWrite'], self.ex_mem_register.reg_dst_out,
-                                            self.if_id_register.rs_out, self.if_id_register.rt_out, self.branch_logic.branch_taken, self.id_ex_register.controll_signal_out['MemRead']])
+                                            self.if_id_register.rs_out, self.if_id_register.rt_out, self.branch_logic.branch_taken])
 
         
         

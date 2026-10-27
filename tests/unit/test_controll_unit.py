@@ -2,7 +2,7 @@ import unittest
 from elements.controll_unit import Controller
 from common import Value
 
-class Test_Controller(unittest.TestCase):
+class TestController(unittest.TestCase):
     def setUp(self):
         self.controller = Controller()
         self.oppcode = Value(0)
@@ -17,4 +17,10 @@ class Test_Controller(unittest.TestCase):
         self.assertEqual(self.controller.RegDst.value, 1)
         self.assertEqual(self.controller.ALUSrc.value, 0)
         self.assertEqual(self.controller.RegWrite.value, 1)
-        self.assertEqual(self.controller.ALUOp.value, 10)
+        self.assertEqual(self.controller.ALUOp.value, 0b10)
+        self.assertEqual(self.controller.Branch.value, 0)
+        self.assertEqual(self.controller.MemRead.value, 0)
+        self.assertEqual(self.controller.MemtoReg.value, 0)
+        self.assertEqual(self.controller.MemWrite.value, 0)
+        self.assertEqual(self.controller.Jump.value, 0)
+        self.assertEqual(self.controller.Bne_Bit.value, 0)

@@ -16,7 +16,8 @@ class Hazard_detection(CPUElement):
         self.if_id_rs: Value = Value(0)
         self.if_id_rt: Value = Value(0)
         self.branch_taken: Value = Value(0)
-        self.id_ex_MemRead: Value = Value(0)
+        
+        
         #Outputs
         self.if_id_write= Value(1)
         self.pc_write = Value(1)
@@ -24,7 +25,7 @@ class Hazard_detection(CPUElement):
         self.if_id_flush = Value(0)
 
     def connectInputs(self, inputs: List[Value]):
-        assert len(inputs) == 8, "hazard detection should have 6 inputs"
+        assert len(inputs) == 7, "hazard detection should have 7 inputs"
         self.id_ex_RegWrite = inputs[0]
         self.muxregdist_result = inputs[1]
         self.ex_mem_RegWrite = inputs[2]
@@ -32,7 +33,8 @@ class Hazard_detection(CPUElement):
         self.if_id_rs = inputs[4]
         self.if_id_rt = inputs[5]
         self.branch_taken = inputs[6]
-        self.id_ex_MemRead = inputs[7]
+      
+        
         
 
     def writeOutput(self):

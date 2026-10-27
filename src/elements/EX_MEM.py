@@ -7,14 +7,14 @@ class Ex_mem(CPUElement):
     def __init__(self):
         #Inputs
         self.alu_result_inp: Value = Value(0)
-        self.read_data2_inp: Value = Value(0)
+        self.read_data_2_inp: Value = Value(0)
         self.reg_dst_inp: Value = Value(0)
         
 
         self.controll_signal_inp: dict[str, Value] = {
             'MemtoReg': Value(0), 'MemRead': Value(0), 
             'MemWrite': Value(0), 'RegWrite': Value(0),
-            'Break': Value(0), 'TrapOverflow': Value(0)
+            'Break': Value(0)
         }
         
         #Outputs
