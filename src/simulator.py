@@ -7,14 +7,15 @@ from mipsSimulator import MIPSSimulator, Break
 
 
 
-def runSimulator(sim: MIPSSimulator):
+def runSimulator(sim: MIPSSimulator, max_cycles: int = 1000):
     try:
-        while True:
+        while sim.nCycles < max_cycles:
             sim.tick()
     except Break:
         print("\n--- Programmet er ferdig (Break nådd) ---")
-        sim.printRegisterFile()
-        sim.printDataMemory()
+    sim.printRegisterFile()
+    sim.printDataMemory()
+        
 
 if __name__ == '__main__':
     assert len(sys.argv) == 2, f"Usage: python {sys.argv[0]} memoryFile"

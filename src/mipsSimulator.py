@@ -186,6 +186,7 @@ class MIPSSimulator():
     def tick(self):
         '''Execute one clock cycle of pipeline.'''
         self.nCycles += 1
+        print(f"Syklus {self.nCycles}: PC = {hex(self.pc.currentAddress.value)}")
         if self.nCycles > 1:
             self.mem_wb_register.writeOutput()
             self.ex_mem_register.writeOutput()
